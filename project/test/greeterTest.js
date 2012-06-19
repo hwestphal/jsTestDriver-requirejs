@@ -14,7 +14,7 @@ AsyncTestCase('greeterTest', {
 });
 */
 
-RequireTestCase('greeterTest2', ['greeter'], {
+RequireTestCase('greeterTest', ['greeter'], {
 	adder: function(a, b) {
 		return a+b;
 	},

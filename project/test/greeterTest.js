@@ -31,5 +31,15 @@ RequireTestCase('greeterTest', ['greeter'], {
 	},
 	testMore: function() {
 		assertEquals(3, this.adder(this.CONST_A, this.CONST_B));
+	},
+	testCallback: function(greeter) {
+		var s;
+		this.call(function(callbacks) {
+			callbacks.add(function(n) {
+				s = greeter.greet(n);
+			})('Ingo');
+		}).call(function() {
+			assertEquals('Hello Ingo', s);
+		});
 	}
 });

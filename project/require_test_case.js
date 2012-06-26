@@ -40,7 +40,7 @@ function RequireTestCase(name, moduleNames, def) {
 							}));
 						});
 						queue.call(function() {
-							that.call = function(func) {
+							that.callLater = function(func) {
 								queue.call(func);
 								return that;
 							};

@@ -34,11 +34,11 @@ RequireTestCase('greeterTest', ['greeter'], {
 	},
 	testCallback: function(greeter) {
 		var s;
-		this.call(function(callbacks) {
+		this.callLater(function(callbacks) {
 			callbacks.add(function(n) {
 				s = greeter.greet(n);
 			})('Ingo');
-		}).call(function() {
+		}).callLater(function() {
 			assertEquals('Hello Ingo', s);
 		});
 	}

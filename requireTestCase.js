@@ -25,32 +25,44 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.
  */
-function RequireTestCase(name, moduleNames, def) {
-	var testCase = AsyncTestCase(name);
-	for (var key in def) {
-		if (def.hasOwnProperty(key)) {
-			if (key === 'setUp' || key === 'tearDown' || key.substring(0, 4) === 'test') {
-				testCase.prototype[key] = (function(f) {
-					return function(queue) {
-						var that = this;
-						var modules;
-						queue.call(function(callbacks) {
-							require(moduleNames, callbacks.add(function() {
-								modules = arguments;
-							}));
-						});
-						queue.call(function() {
-							that.callLater = function(func) {
-								queue.call(func);
-								return that;
-							};
-							f.apply(that, modules);
-						});
-					}
-				})(def[key]);
-			} else {
-				testCase.prototype[key] = def[key];
+var RequireTestCase, ConditionalRequireTestCase;
+
+(function() {
+	var buildTestCase = function(testCase, moduleNames, proto) {
+		for (var key in proto) {
+			if (proto.hasOwnProperty(key)) {
+				if (key === 'setUp' || key === 'tearDown' || key.substring(0, 4) === 'test') {
+					testCase.prototype[key] = (function(f) {
+						return function(queue) {
+							var that = this;
+							var modules;
+							queue.call(function(callbacks) {
+								require(moduleNames, callbacks.add(function() {
+									modules = arguments;
+								}));
+							});
+							queue.call(function() {
+								that.callLater = function(func) {
+									queue.call(func);
+									return that;
+								};
+								f.apply(that, modules);
+							});
+						}
+					})(proto[key]);
+				} else {
+					testCase.prototype[key] = proto[key];
+				}
 			}
 		}
-	}
-}
+		return testCase;
+	};
+
+	RequireTestCase = function(name, moduleNames, proto) {
+		return buildTestCase(AsyncTestCase(name), moduleNames, proto);
+	};
+
+	ConditionalRequireTestCase = function(name, condition, moduleNames, proto) {
+		return buildTestCase(ConditionalAsyncTestCase(name, condition), moduleNames, proto);
+	};
+})();

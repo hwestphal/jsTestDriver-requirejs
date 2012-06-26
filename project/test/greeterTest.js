@@ -43,3 +43,9 @@ RequireTestCase('greeterTest', ['greeter'], {
 		});
 	}
 });
+
+ConditionalRequireTestCase('disabledTest', function() { return false }, ['jquery'], {
+	testFailingAssert: function() {
+		assertEquals(1, 2);
+	}
+});

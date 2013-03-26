@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Harald Westphal
+ * Copyright (c) 2012, Harald Westphal
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
